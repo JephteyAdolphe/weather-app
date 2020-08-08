@@ -13,7 +13,7 @@ function Footer() {
                         <ul>
                             <li>
                                 <a className="nav-link" href="https://www.linkedin.com/in/jephtey-adolphe-160166147/">
-                                <img src={linkedin} />
+                                <img src={linkedin} className="picHover"/>
                                 </a>
                             </li>
                         </ul>
@@ -22,7 +22,7 @@ function Footer() {
                         <ul>
                             <li>
                                 <a className="nav-link" href="https://github.com/JephteyAdolphe/weather-app">
-                                <img src={github} />
+                                <img src={github} className="picHover" />
                                 </a>
                             </li>
                         </ul>
