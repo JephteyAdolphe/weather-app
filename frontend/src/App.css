@@ -52,3 +52,21 @@ h1, h2, h3, h4, h5, p, span, strike {
 .weather-wrapper:hover {
     background-color: #F0F0F0;
 }
+
+.results {
+    
+    margin: 0 auto;
+  }
+
+  div.square {
+    color: white;
+    width: 600px;
+    height: 300px;
+  }
+
+  #menu ul{
+    list-style: none;
+  }
+  #menu li{
+    display: inline;
+  }

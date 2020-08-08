@@ -2,6 +2,7 @@
 import './App.css';
 import Weather from './components/Weather';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 class App extends React.Component {
 
@@ -12,59 +13,73 @@ constructor(props) {
       temp: null,
       minTemp: null,
       maxTemp: null,
+      humidity: null,
       desc: '',
-      icon: ''
+      icon: '',
+      forecast: []
   
   }
   this.fetchForecast = this.fetchForecast.bind(this)
-  this.handleChange = this.handleChange.bind(this)
 };
 
 componentDidMount() {
+  fetch.get("https://api.openweathermap.org/data/2.5/weather?q=miami&units=imperial&appid=87747d91dbe41f823bd06eb6b53c65be")
+  .then(response => {
+    console.log(response)
+  })
   this.fetchForecast()
 }
 
+
 fetchForecast() {
+  //event.preventDefault();
   console.log('Fetching...')
 
-  fetch('http://127.0.0.1:8000/', {method: "GET", mode: "cors", headers: {"Content-Type": "application/json", "Accept": "application/json"}})
+  fetch("api.openweathermap.org/data/2.5/weather?q=Miami&units=imperial&appid=87747d91dbe41f823bd06eb6b53c65be")
   .then(response => response.json())
-  /*.then(data => 
+  .then(data => 
       this.setState({
         weather:data
-        console.log(weather)
       })
     )
-   .then(data => console.log(data))
-   .catch(err => alert("Wrong city name!"))
+   //.then(console.log(this.response))
+   //.catch(err => alert("Wrong city name!"))
 }
 
-handleChange(e) {
-  var name = e.target.name
-  console.log('City is: ', name)
-
-  this.setState({
-    
+handleSubmit = (event) => {
+  event.preventDefault()
+  axios.post(`api.openweathermap.org/data/2.5/weather?q=miami&units=imperial&appid=87747d91dbe41f823bd06eb6b53c65be`)
+  .then(response => {
+    console.log(response.json())
   })
 }
 
+handleInputChange = (event) => {
+    this.setState({[event.target.name]: event.target.value})
+}
+
   render() {
+    //const { city, temp, minTemp, maxTemp, humidity, desc, icon } = this.state
     return (
       <div className="container">
         <div id="weather-container">
           <div id="form-wrapper">
-            <form id="form">
+            <form id="form" onSubmit={this.handleSubmit} >
               <div className="flex-wrapper">
                 <div style={{flex: 6}}>
-                  <input onChange={this.handleChange} className="form-control" id="city-search" type="text" placeholder="Enter a City" />
+                  <input className="form-control" id="city-search" type="text" placeholder="Enter a City" value={this.city} name="city" onChange={this.handleInputChange} required />
                 </div>
 
                 <div style={{flex: 1}}>
-                  <input id="submit" className="btn btn-warning" type="submit" name="Search" />
+                  <input id="submit" className="btn btn-warning" type="submit" value="Search" />
                 </div>
-                
               </div>
             </form>
+            <script>
+              var form = document.getElementById('form')
+
+              form.addEventListener('submit', (event))
+            </script>
           </div>
           <div>
               <h1 className="display">{this.data}</h1>
@@ -73,110 +88,33 @@ handleChange(e) {
           </div>
         </div>
       </div>
+      
     )
   }
 }
 
 export default App;
+
 */
+import React from 'react';
+import './App.css';
+import Weather from './components/Weather';
+import Footer from './components/Footer';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import React from "react"
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import Weather from "./components/Weather";
-
-import places from "./keys/places.js"
-
-
-class App extends React.Component {
+function App() {
+  return (
+    <div className="container">
+      <header className="App-header">
+        <h1>React Weather App</h1>
+      </header>
+      <main>
+        <Weather />
+      </main>
+      <Footer />
+    </div>
     
-    // input reference to access it through DOM API in React
-    inputRef = React.createRef();
-
-    constructor() {
-		super();
-		this.state = {
-            city: {},
-            weatherData: {},
-            description: {},
-            weatherIsHidden: false
-        }
-        this.clearInput =  this.clearInput.bind(this)        
-    }
-    
-    componentDidMount () {
-        // To load GooglePlacesAutocomplete API
-        const script = document.createElement("script");
-
-        const end1 = "https://maps.googleapis.com/maps/api/js?key="
-        const end2 = "&libraries=places"
-        let fullURL = end1 + places + end2
-
-        script.src = fullURL;
-        script.async = true;
-        document.body.appendChild(script);
-    }
-
-    clearInput(event) {
-        event.preventDefault();
-        // Setting state of <GooglePlacesAutocomplete /> component
-        // console.log(this.inputRef.current)
-        // console.log(this.inputRef.current.state.value)
-        // this.inputRef.current.state.value = ""
-        
-        // Empties the suggestions array and input value
-        this.inputRef.current.setState({
-            value: "",
-            suggestions: []
-        })
-
-        // Upon clicking cross icon, weatherData will also be hidden 
-        // and city object will be empty
-        this.setState({
-            city: {},
-            weatherIsHidden: true
-        })
-    }
-    
-    render(){
-        // For input tag
-        const inputStyles = {
-            width: "100%"
-        }
-        // console.log("testing6")
-        // console.log(this.inputRef)
-        // console.log("weather hidden from app.js ", this.state.weatherIsHidden)
-
-		return(
-            <div className="container background">
-                <div className="header">
-                    <h3>Welcome to</h3>
-                    <h1 id="brand-name">Jeff's Wonderful Weather Finder</h1>
-                </div> 
-                
-                {/* Use ref to access DOM elements in React */}
-                <GooglePlacesAutocomplete
-                        placeholder="Enter a City"
-                        inputStyle={inputStyles} 
-                        ref={this.inputRef}
-                        onSelect={(description) => (
-                            this.setState({ 
-                                city: description,  // city state object will get selected city name 
-                                weatherIsHidden: false // weather will not be hidden
-                            })
-                        )}
-                />
-                
-                {/* Clearing input on clicking X */}
-                <span onClick={this.clearInput} className="clear-input">Clear</span>
-                
-                {/* Passing city object to Weather component 
-                  * Weather component will be hidden based on weatherIsHidden state
-                */}
-                <Weather city={this.state.city} weatherIsHidden = {this.state.weatherIsHidden}/>
-
-            </div>
-        )
-    } 
-}
-
-export default App
+  );
+ }
+ export default App;
+ 
