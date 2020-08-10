@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "homepage": "https://jeffs-weather-app.heroku.com",
+  "homepage": "https://jephtey-weather.heroku.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
